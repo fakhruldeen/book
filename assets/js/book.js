@@ -77,10 +77,38 @@
     // Tables: horizontal scroll wrapper
     $$('table', md).forEach(t => { if (!t.parentElement.classList.contains('table-wrap')) { const w = el('div', { class: 'table-wrap' }); t.replaceWith(w); w.append(t); } });
 
-    // Heading anchors
-    $$('h1,h2,h3,h4,h5,h6', md).forEach(h => {
-      if (!h.id) return;
-      h.append(el('a', { class: 'anchor', href: `#${h.id}`, 'aria-label': 'رابط مباشر لهذا العنوان', text: '#' }));
+    // Heading anchors (## ### #### #####) with clean slugs
+    const seenIds = new Set();
+    const slugify = text => {
+      const s = text.trim()
+        .replace(/[#*`_~\[\]()<>]/g, '')
+        .trim()
+        .replace(/[\s\t\n]+/g, '-')
+        .replace(/[^\w\u0600-\u06FF\-]/g, '')
+        .toLowerCase() || 'section';
+      let candidate = s;
+      let c = 1;
+      while (seenIds.has(candidate) || (document.getElementById(candidate) && document.getElementById(candidate).tagName.toLowerCase()[0] !== 'h')) {
+        candidate = `${s}-${c++}`;
+      }
+      seenIds.add(candidate);
+      return candidate;
+    };
+
+    $$('h2,h3,h4,h5', md).forEach(h => {
+      if (!h.id || h.id.startsWith('section')) {
+        h.id = slugify(h.textContent);
+      } else {
+        seenIds.add(h.id);
+      }
+      const anchor = el('a', { class: 'anchor', href: `#${h.id}`, 'aria-label': 'رابط مباشر لهذا العنوان', text: '#' });
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+        history.pushState(null, '', `#${h.id}`);
+        h.scrollIntoView({ behavior: 'smooth' });
+        try { navigator.clipboard.writeText(location.href); } catch (err) {}
+      });
+      h.append(anchor);
     });
 
     // Code blocks: language label + copy button   (skip mermaid, handled separately)
@@ -132,12 +160,145 @@
     document.head.append(el('script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS_HTML', async: '' }));
   }
 
+  /* ---------- Reading scroll progress (line under topbar) ---------- */
+  function initReadingProgress() {
+    const bar = $('#progress-bar');
+    if (!bar) return;
+    const update = () => {
+      const docEl = document.documentElement;
+      const scrollTop = window.scrollY || docEl.scrollTop || 0;
+      const scrollHeight = docEl.scrollHeight - window.innerHeight;
+      if (scrollHeight <= 0) {
+        bar.style.width = '0%';
+        return;
+      }
+      const pct = Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100));
+      bar.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  }
+
+  /* ---------- On-page TOC (Desktop right sidebar + Mobile collapsed details) ---------- */
+  function initPageTOC() {
+    if (!md) return;
+    const headings = $$('h2, h3, h4, h5', md);
+    if (headings.length < 2) return;
+
+    const shell = $('#page-shell');
+    const aside = $('#page-toc');
+    const nav = $('#page-toc-nav');
+    const toggleBtn = $('#page-toc-toggle');
+    const reopenBtn = $('#page-toc-reopen');
+    const wrap = $('.wrap');
+
+    const getCleanTitle = h => {
+      const clone = h.cloneNode(true);
+      const a = clone.querySelector('.anchor');
+      if (a) a.remove();
+      return clone.textContent.trim();
+    };
+
+    if (aside && nav && shell) {
+      aside.hidden = false;
+      if (wrap) wrap.classList.add('has-toc');
+
+      try {
+        if (localStorage.getItem('book:toc-hidden') === 'true') {
+          shell.classList.add('toc-hidden');
+          if (wrap) wrap.classList.add('toc-hidden');
+          if (reopenBtn) reopenBtn.hidden = false;
+        }
+      } catch (e) {}
+
+      headings.forEach(h => {
+        const level = parseInt(h.tagName[1], 10);
+        const title = getCleanTitle(h);
+        const link = el('a', {
+          class: `page-toc-link toc-l${level}`,
+          href: `#${h.id}`,
+          text: title,
+          'data-target': h.id
+        });
+        link.addEventListener('click', ev => {
+          ev.preventDefault();
+          history.pushState(null, '', `#${h.id}`);
+          h.scrollIntoView({ behavior: 'smooth' });
+        });
+        nav.append(link);
+      });
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          shell.classList.add('toc-hidden');
+          if (wrap) wrap.classList.add('toc-hidden');
+          if (reopenBtn) reopenBtn.hidden = false;
+          try { localStorage.setItem('book:toc-hidden', 'true'); } catch (e) {}
+        });
+      }
+
+      if (reopenBtn) {
+        reopenBtn.addEventListener('click', () => {
+          shell.classList.remove('toc-hidden');
+          if (wrap) wrap.classList.remove('toc-hidden');
+          reopenBtn.hidden = true;
+          try { localStorage.setItem('book:toc-hidden', 'false'); } catch (e) {}
+        });
+      }
+    }
+
+    const mobileDetails = el('details', { class: 'page-toc-mobile' },
+      el('summary', {},
+        el('span', { class: 'toc-m-icon', text: '📑' }),
+        el('span', { class: 'toc-m-title', text: 'محتويات هذه الصفحة' }),
+        el('span', { class: 'toc-m-count', text: `(${headings.length} أقسام)` })
+      )
+    );
+    const mobileNav = el('nav', { class: 'page-toc-nav mobile-nav' });
+    headings.forEach(h => {
+      const level = parseInt(h.tagName[1], 10);
+      const title = getCleanTitle(h);
+      const mlink = el('a', {
+        class: `page-toc-link toc-l${level}`,
+        href: `#${h.id}`,
+        text: title,
+        'data-target': h.id
+      });
+      mlink.addEventListener('click', ev => {
+        ev.preventDefault();
+        mobileDetails.removeAttribute('open');
+        history.pushState(null, '', `#${h.id}`);
+        h.scrollIntoView({ behavior: 'smooth' });
+      });
+      mobileNav.append(mlink);
+    });
+    mobileDetails.append(mobileNav);
+    md.parentElement.insertBefore(mobileDetails, md);
+
+    const updateScrollspy = () => {
+      const scrollPos = window.scrollY + 110;
+      let currentId = '';
+      for (const h of headings) {
+        if (h.offsetTop <= scrollPos) {
+          currentId = h.id;
+        } else {
+          break;
+        }
+      }
+      $$('.page-toc-link').forEach(link => {
+        link.classList.toggle('active', link.dataset.target === currentId);
+      });
+    };
+    window.addEventListener('scroll', updateScrollspy, { passive: true });
+    updateScrollspy();
+  }
+
   /* ---------- Progress (topbar, cover, TOC) ---------- */
   function progressUI() {
     const total = +document.body.dataset.total || 0;
     const done = Object.keys(passedMap()).length;
     const pct = total ? Math.round((done / total) * 100) : 0;
-    const bar = $('#progress-bar'); if (bar) bar.style.width = pct + '%';
     const pill = $('#progress-pill'); if (pill && done) { pill.hidden = false; pill.textContent = `${done}/${total} ✓`; }
     const cp = $('#cover-progress');
     if (cp && done) {
@@ -279,7 +440,7 @@
 
   /* ---------- boot ---------- */
   const boot = () => {
-    enhance(); collectMermaid(); progressUI(); initQuiz(); loadMath(); renderMermaid();
+    enhance(); initReadingProgress(); initPageTOC(); collectMermaid(); progressUI(); initQuiz(); loadMath(); renderMermaid();
   };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
 })();
