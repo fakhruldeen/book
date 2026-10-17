@@ -7,17 +7,30 @@
     {%- if forloop.first -%}{%- assign _acc = s -%}{%- else -%}{%- assign _acc = _acc | append: "/" | append: s -%}{%- endif -%}
     {%- assign _target = _acc | append: ".md" -%}
     {%- assign _coll_target = "_book/" | append: _target -%}
+    {%- assign s_num = "" -%}
+    {%- if s contains "_" -%}
+      {%- assign _candidate = s | split: "_" | first -%}
+      {%- assign _first_char = _candidate | slice: 0, 1 -%}
+      {%- if "0123456789" contains _first_char -%}
+        {%- assign s_num = _candidate -%}
+      {%- endif -%}
+    {%- endif -%}
     {%- unless forloop.last -%}
       {%- for p in include.book -%}
         {%- if p.path == _target or p.path == _coll_target -%}
-          {%- capture p_num -%}{% if p.num %}{{ p.num }}{% else %}{% include num.html path=p.path %}{% endif %}{%- endcapture -%}
-          {%- assign p_num = p_num | strip -%}
-          <li><a href="{{ p.url | relative_url }}">{% if p_num != "" %}<span class="crumb-num" dir="ltr">{{ p_num }}</span> {% endif %}{{ p.title }}</a></li>
+          <li><a href="{{ p.url | relative_url }}">{% if s_num != "" %}<span class="crumb-num" dir="ltr">{{ s_num }}</span> {% endif %}{{ p.title }}</a></li>
         {%- endif -%}
       {%- endfor -%}
     {%- endunless -%}
   {%- endfor -%}
-  {%- capture cur_num -%}{% if page.num %}{{ page.num }}{% else %}{% include num.html path=page.path %}{% endif %}{%- endcapture -%}
-  {%- assign cur_num = cur_num | strip -%}
+  {%- assign cur_seg = _segs | last -%}
+  {%- assign cur_num = "" -%}
+  {%- if cur_seg contains "_" -%}
+    {%- assign _candidate = cur_seg | split: "_" | first -%}
+    {%- assign _first_char = _candidate | slice: 0, 1 -%}
+    {%- if "0123456789" contains _first_char -%}
+      {%- assign cur_num = _candidate -%}
+    {%- endif -%}
+  {%- endif -%}
   <li aria-current="page">{% if cur_num != "" %}<span class="crumb-num" dir="ltr">{{ cur_num }}</span> {% endif %}{{ page.title }}</li>
 </ol>
