@@ -20,6 +20,20 @@ dir: "rtl"
 book_timestamp: "2026-10-18T00:00:00+03:00"
 book_date_formatted: "الأحد، ٦ جمادى الأولى ١٤٤٨ هـ / ١٨ أكتوبر ٢٠٢٦ م"
 
+# ---------- Cover Art, Favicon & Social Meta (SEO) ----------
+# Optional cover background image: displayed behind the <section class="cover"> card box.
+# If set, it adds an atmospheric blurred backdrop. If left empty (""), it defaults to a clean procedural gradient.
+cover_image: "/assets/images/cover.svg"
+
+# Social card share image (1200x630) for Open Graph, Facebook, WhatsApp, Twitter/X cards
+social_image: "/assets/images/cover.svg"
+
+# Favicon for browser tabs and mobile bookmarks
+favicon: "/assets/images/favicon.svg"
+
+# Default SEO keywords for search engine crawlers
+keywords: "كتاب عربي, Jekyll, Markdown, GitHub Pages, طباعة عربية, كتاب تفاعلي, برمجة, نشر رقمي, Arabic book, RTL"
+
 # ---------- Author Profile ----------
 author:
   name: "محمد فخر الدين"

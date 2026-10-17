@@ -69,14 +69,67 @@ a:hover { text-decoration-thickness: 2px; }
 .topbar-progress i { display: block; height: 100%; width: 0%; background: var(--reading-progress); box-shadow: 0 0 8px color-mix(in srgb, var(--reading-progress) 50%, transparent); transition: width .06s linear; }
 
 /* ===== Cover ===== */
-.cover { min-height: 62vh; display: grid; place-items: center; padding: 28px 0; }
+.cover {
+  position: relative;
+  min-height: 64vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 48px) 0;
+  border-radius: 32px;
+  overflow: hidden;
+  margin: 12px 0 28px;
+}
+
+/* Optional cover image behind the box */
+.cover.has-cover-bg {
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 48px -16px rgba(0, 0, 0, 0.18), var(--shadow);
+}
+
+.cover.has-cover-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--cover-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(14px) saturate(1.25);
+  transform: scale(1.08);
+  opacity: 0.38;
+  z-index: 0;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+html[data-theme="dark"] .cover.has-cover-bg::before {
+  opacity: 0.26;
+  filter: blur(18px) brightness(0.65) saturate(1.4);
+}
+
+.cover.has-cover-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 35%, var(--bg) 98%);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .cover-card {
-  width: 100%; text-align: center; padding: clamp(28px, 7vw, 64px) clamp(18px, 5vw, 48px); border-radius: 28px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  padding: clamp(28px, 7vw, 64px) clamp(18px, 5vw, 48px);
+  border-radius: 28px;
   background:
     radial-gradient(900px 300px at 85% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
     radial-gradient(700px 260px at 0% 110%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
-    var(--surface);
-  border: 1px solid var(--line); box-shadow: var(--shadow);
+    color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
 }
 .cover-kicker { font-family: var(--font-ui); letter-spacing: .02em; color: var(--accent); font-weight: 700; margin: 0; }
 .cover h1 { font-family: var(--font-ui); font-weight: 800; font-size: clamp(32px, 7vw, 56px); line-height: 1.35; margin: 8px 0 4px; }

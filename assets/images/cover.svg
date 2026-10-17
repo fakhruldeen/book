@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#032b43"/>
+    </linearGradient>
+    
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    
+    <radialGradient id="glow1" cx="80%" cy="20%" r="50%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="glow2" cx="15%" cy="85%" r="60%">
+      <stop offset="0%" stop-color="#059669" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Filter for subtle drop shadow -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Decorative Modern Grid Pattern -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="100" y1="0" x2="100" y2="630"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="500" y1="0" x2="500" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="700" y1="0" x2="700" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+    <line x1="1100" y1="0" x2="1100" y2="630"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+  </g>
+
+  <!-- Decorative Shapes / Book Motif -->
+  <g opacity="0.12">
+    <circle cx="1020" cy="180" r="140" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="1020" cy="180" r="190" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="8 8"/>
+    <circle cx="180" cy="460" r="160" fill="none" stroke="#059669" stroke-width="1" stroke-dasharray="12 12"/>
+  </g>
+
+  <!-- Central Card Container -->
+  <g filter="url(#shadow)">
+    <rect x="80" y="60" width="1040" height="510" rx="32" fill="#0f172a" fill-opacity="0.82" stroke="#334155" stroke-width="2"/>
+  </g>
+
+  <!-- Badge -->
+  <rect x="870" y="105" width="200" height="38" rx="19" fill="#0369a1" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="970" y="130" fill="#38bdf8" font-family="'Cairo', sans-serif" font-size="16" font-weight="bold" text-anchor="middle" direction="rtl">الطبعة الأولى · تفاعلي</text>
+
+  <!-- Open Graph Logo / Emblem -->
+  <g transform="translate(130, 105)">
+    <rect width="64" height="64" rx="18" fill="url(#accentGrad)"/>
+    <text x="32" y="44" fill="#ffffff" font-size="32" font-family="sans-serif" font-weight="bold" text-anchor="middle">📖</text>
+  </g>
+
+  <!-- Book Main Title (Arabic) -->
+  <text x="1070" y="240" fill="#ffffff" font-family="'Cairo', sans-serif" font-size="52" font-weight="800" text-anchor="end" direction="rtl">كتاب Markdown التفاعلي</text>
+  <text x="1070" y="315" fill="url(#accentGrad)" font-family="'Cairo', sans-serif" font-size="44" font-weight="700" text-anchor="end" direction="rtl">ومختبر الطباعة العربية المعيارية</text>
+
+  <!-- Subtitle -->
+  <text x="1070" y="385" fill="#94a3b8" font-family="'Noto Naskh Arabic', sans-serif" font-size="24" font-weight="normal" text-anchor="end" direction="rtl">دليلك الشامل لبناء الكتب الرقمية التفاعلية واختبارات الطباعة على GitHub Pages</text>
+
+  <!-- Divider Line -->
+  <line x1="130" y1="440" x2="1070" y2="440" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Footer Info inside Card -->
+  <!-- Left: Metadata -->
+  <text x="130" y="495" fill="#e2e8f0" font-family="'Cairo', sans-serif" font-size="20" font-weight="bold">Jekyll Themes Standard</text>
+  <text x="130" y="525" fill="#64748b" font-family="monospace" font-size="16">15 Layouts · Zero Setup · RTL Native</text>
+
+  <!-- Right: Author -->
+  <text x="1070" y="495" fill="#f8fafc" font-family="'Cairo', sans-serif" font-size="20" font-weight="bold" text-anchor="end" direction="rtl">✍️ محمد فخر الدين (Mohamed Fakhruldeen)</text>
+  <text x="1070" y="525" fill="#38bdf8" font-family="monospace" font-size="16" text-anchor="end">fakhruldeen.github.io/book</text>
+</svg>

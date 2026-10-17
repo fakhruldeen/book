@@ -11,7 +11,8 @@ layout: default
   {%- endif -%}
 {%- endfor -%}
 
-<section class="cover">
+{%- assign cover_bg = page.cover_image | default: site.cover_image -%}
+<section class="cover{% if cover_bg and cover_bg != '' %} has-cover-bg{% endif %}"{% if cover_bg and cover_bg != '' %} style="--cover-bg-image: url('{{ cover_bg | relative_url }}');"{% endif %}>
   <div class="cover-card">
     <div class="cover-badge">{{ site.edition | default: "كتاب تفاعلي" }}</div>
     <h1 class="cover-title">{{ site.title }}</h1>
