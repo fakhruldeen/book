@@ -1,5 +1,9 @@
 ---
+layout: subsubsection
 title: محاذاة الأعمدة
+slug: "01-alignment"
+permalink: /01_basics/02_lists/02_tables/01_alignment.html
+published: true
 quiz:
   - type: radio
     q: "الصيغة :---: تعني محاذاة العمود إلى:"

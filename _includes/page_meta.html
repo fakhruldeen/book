@@ -1,0 +1,23 @@
+<section class="page-meta-bar" aria-label="بيانات توثيق الصفحة">
+  <div class="meta-inner">
+    <div class="meta-item meta-date">
+      <span class="meta-icon" aria-hidden="true">📅</span>
+      <span class="meta-label">تاريخ النشر والتحديث:</span>
+      <time datetime="{{ page.date | default: site.book_timestamp | date_to_xmlschema }}" class="meta-val">
+        {{ page.date | default: site.book_timestamp | date: "%Y-%m-%d %H:%M %Z" }}
+      </time>
+    </div>
+    <div class="meta-item meta-author">
+      <span class="meta-icon" aria-hidden="true">✍️</span>
+      <span class="meta-label">المؤلف:</span>
+      <span class="meta-val">{{ page.author | default: site.author.name }}</span>
+    </div>
+    <div class="meta-item meta-sha">
+      <span class="meta-icon" aria-hidden="true">🔒</span>
+      <span class="meta-label">بصمة الملف (SHA-256):</span>
+      <code class="meta-val page-sha" data-sha="{{ page.sha | default: '' }}" title="انقر لنسخ بصمة التحقق من سلامة المحتوى">
+        {%- if page.sha and page.sha != "" -%}{{ page.sha }}{%- else -%}جاري الحساب...{%- endif -%}
+      </code>
+    </div>
+  </div>
+</section>

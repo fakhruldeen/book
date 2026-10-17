@@ -1,0 +1,10 @@
+<header class="topbar">
+  <a class="brand" href="{{ '/' | relative_url }}">📖 <span>{{ site.title }}</span></a>
+  <nav class="top-actions" aria-label="التنقل الرئيسي">
+    <a href="{{ '/search/' | relative_url }}" class="nav-link search-link" title="البحث في الكتاب" aria-label="البحث في الكتاب">🔍 <span class="hide-sm">بحث</span></a>
+    <a href="{{ '/contents/' | relative_url }}" class="nav-link toc-link" title="فهرس الموضوعات">الفهرس</a>
+    <span class="progress-pill" id="progress-pill" title="الصفحات المُنجَزة" hidden></span>
+    <button type="button" id="theme-toggle" class="icon-btn" aria-label="تبديل الوضع الليلي" title="تبديل الوضع الليلي">🌓</button>
+  </nav>
+  <div class="topbar-progress" aria-hidden="true"><i id="progress-bar"></i></div>
+</header>

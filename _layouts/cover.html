@@ -1,16 +1,29 @@
 ---
 layout: default
 ---
-{%- assign _first = site.pages | where: "layout", "page" | sort: "path" | first -%}
+{%- assign _all_docs = site.pages -%}
+{%- if site.book and site.book.size > 0 -%}{%- assign _all_docs = _all_docs | concat: site.book -%}{%- endif -%}
+{%- assign _first = nil -%}
+{%- for p in _all_docs -%}
+  {%- if p.path contains ".md" and p.path != "index.md" and p.path != "contents.md" and p.path != "search.md" and p.path != "404.md" and p.path != "README.md" and p.layout != "cover" and p.layout != "toc" and p.layout != "search" and p.layout != "frontmatter" and p.layout != "backmatter" -%}
+    {%- assign _first = p -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <section class="cover">
   <div class="cover-card">
-    <p class="cover-kicker">كتاب تفاعلي</p>
-    <h1>{{ site.title }}</h1>
+    <div class="cover-badge">{{ site.edition | default: "كتاب تفاعلي" }}</div>
+    <h1 class="cover-title">{{ site.title }}</h1>
     <p class="cover-sub">{{ site.subtitle }}</p>
-    <p class="cover-author">{{ site.author }}</p>
+    <div class="cover-author-meta">
+      <span class="cover-author">✍️ {{ site.author.name | default: site.author }}</span>
+      <span class="cover-date">📅 {{ site.book_date_formatted | default: site.book_timestamp }}</span>
+    </div>
     <div class="cover-actions">
-      {% if _first %}<a class="btn primary" id="start-btn" href="{{ _first.url | relative_url }}">ابدأ القراءة</a>{% endif %}
-      <a class="btn" href="{{ '/contents/' | relative_url }}">الفهرس</a>
+      {% if _first %}<a class="btn primary" id="start-btn" href="{{ _first.url | relative_url }}">ابدأ القراءة 📖</a>{% endif %}
+      <a class="btn" href="{{ '/contents/' | relative_url }}">فهرس الموضوعات 📑</a>
+      <a class="btn" href="{{ '/search/' | relative_url }}">البحث في الكتاب 🔍</a>
     </div>
     <div class="cover-progress" id="cover-progress" hidden>
       <div class="bar"><i></i></div>
@@ -18,4 +31,11 @@ layout: default
     </div>
   </div>
 </section>
-<div class="content cover-content">{{ content }}</div>
+
+{% if content and content != "" %}
+<div class="content cover-content">
+  <div class="md">
+    {{ content }}
+  </div>
+</div>
+{% endif %}

@@ -1,21 +1,97 @@
 ---
 layout: default
 ---
-{%- assign book = site.pages | where: "layout", "page" | sort: "path" -%}
+{%- assign _all_docs = site.pages -%}
+{%- if site.book and site.book.size > 0 -%}{%- assign _all_docs = _all_docs | concat: site.book -%}{%- endif -%}
+
+{%- assign front_items = "" | split: "" -%}
+{%- assign book_items = "" | split: "" -%}
+{%- assign back_items = "" | split: "" -%}
+
+{%- for p in _all_docs -%}
+  {%- if p.layout == "frontmatter" or p.path contains "frontmatter/" -%}
+    {%- assign front_items = front_items | push: p -%}
+  {%- elsif p.layout == "backmatter" or p.path contains "backmatter/" -%}
+    {%- assign back_items = back_items | push: p -%}
+  {%- elsif p.path contains ".md" and p.path != "index.md" and p.path != "contents.md" and p.path != "search.md" and p.path != "404.md" and p.path != "README.md" and p.layout != "cover" and p.layout != "toc" and p.layout != "search" -%}
+    {%- assign book_items = book_items | push: p -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign front_items = front_items | sort: "path" -%}
+{%- assign book_items = book_items | sort: "path" -%}
+{%- assign back_items = back_items | sort: "path" -%}
+
 <article class="content toc-page">
-  <h1>{{ page.title }}</h1>
-  {{ content }}
-  <div class="toc-tools">
-    <input id="toc-filter" type="search" placeholder="ابحث في الفهرس…" aria-label="ابحث في الفهرس">
-    <span class="legend">✓ = اجتزت الاختبار بنسبة {{ site.quiz_pass_percent }}٪ أو أكثر</span>
+  <header class="toc-header">
+    <h1 class="node-title">{{ page.title | default: "فهرس محتويات الكتاب" }}</h1>
+    <p class="toc-lead">دليل الأبواب والفصول والمواد التصديرية والملحقات التكميلية في الكتاب.</p>
+  </header>
+
+  {% if content and content != "" %}
+  <div class="md toc-intro">
+    {{ content }}
   </div>
-  <ul class="toc" id="toc">
-  {%- for p in book -%}
-    {%- capture n -%}{% include num.html path=p.path %}{%- endcapture -%}
-    {%- assign parts = n | strip | split: "." -%}
-    <li class="toc-item d{{ parts.size }}" data-num="{{ n | strip }}">
-      <a href="{{ p.url | relative_url }}"><span class="num">{{ n | strip }}</span><span class="t">{{ p.title }}</span><span class="tick" aria-hidden="true"></span></a>
-    </li>
-  {%- endfor -%}
-  </ul>
+  {% endif %}
+
+  <div class="toc-tools">
+    <input id="toc-filter" type="search" placeholder="تصفية فصول وأقسام الفهرس…" aria-label="ابحث في الفهرس">
+    <span class="legend">✓ = اجتزت الاختبار بنسبة {{ site.quiz_pass_percent | default: 80 }}٪ أو أكثر</span>
+  </div>
+
+  <div class="toc-sections">
+    {% if front_items.size > 0 %}
+    <div class="toc-group toc-frontmatter">
+      <h2 class="toc-group-title">مواد التصدير والافتتاح (Front Matter)</h2>
+      <ul class="toc">
+      {% for p in front_items %}
+        <li class="toc-item d1 front-item">
+          <a href="{{ p.url | relative_url }}">
+            <span class="num icon">📖</span>
+            <span class="t">{{ p.title }}</span>
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="toc-group toc-body">
+      <h2 class="toc-group-title">فصول وأقسام الكتاب الأساسية</h2>
+      <ul class="toc" id="toc">
+      {%- for p in book_items -%}
+        {%- capture n -%}
+          {%- if p.num -%}{{ p.num }}{%- else -%}{%- include num.html path=p.path -%}{%- endif -%}
+        {%- endcapture -%}
+        {%- assign n_clean = n | strip -%}
+        {%- assign parts = n_clean | split: "." -%}
+        {%- assign depth = parts.size -%}
+        {%- if depth == 0 or n_clean == "" -%}{%- assign depth = 1 -%}{%- endif -%}
+        <li class="toc-item d{{ depth }}" data-num="{{ n_clean }}">
+          <a href="{{ p.url | relative_url }}">
+            {% if n_clean != "" %}<span class="num">{{ n_clean }}</span>{% endif %}
+            <span class="t">{{ p.title }}</span>
+            <span class="tick" aria-hidden="true"></span>
+          </a>
+        </li>
+      {%- endfor -%}
+      </ul>
+    </div>
+
+    {% if back_items.size > 0 %}
+    <div class="toc-group toc-backmatter">
+      <h2 class="toc-group-title">الخاتمة والملحقات والترخيص (Back Matter)</h2>
+      <ul class="toc">
+      {% for p in back_items %}
+        <li class="toc-item d1 back-item">
+          <a href="{{ p.url | relative_url }}">
+            <span class="num icon">⚖️</span>
+            <span class="t">{{ p.title }}</span>
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
 </article>

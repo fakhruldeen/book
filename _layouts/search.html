@@ -1,0 +1,26 @@
+---
+layout: default
+---
+<article class="content search-page">
+  <header class="search-header">
+    <h1 class="node-title">{{ page.title | default: "البحث في الكتاب" }}</h1>
+    <p class="search-lead">ابحث عن أي مصطلح أو عنوان أو محتوى نصي في جميع فصول ومباحث الكتاب.</p>
+  </header>
+
+  <div class="search-box-wrap">
+    <div class="search-input-group">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="search" id="book-search-input" class="search-input" placeholder="اكتب للبحث في الفصول والمصطلحات..." autofocus aria-label="البحث في الكتاب">
+      <button type="button" id="book-search-clear" class="search-clear-btn" aria-label="مسح حقل البحث" hidden>✕</button>
+    </div>
+    <div class="search-hints">
+      <small>💡 يدعم البحث التلقائي مع تجاهل التشكيل وتوحيد أشكال الهمزة والياء والألف اللينة.</small>
+    </div>
+  </div>
+
+  <div class="search-stats" id="book-search-stats" aria-live="polite"></div>
+
+  <div class="search-results" id="book-search-results" role="region" aria-label="نتائج البحث">
+    <p class="search-empty-prompt">أدخل كلمة البحث في الحقل أعلاه لعرض النتائج الفورية.</p>
+  </div>
+</article>

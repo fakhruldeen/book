@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="{{ site.lang | default: 'ar' }}" dir="rtl">
+<html lang="{{ site.lang | default: 'ar' }}" dir="{{ site.dir | default: 'rtl' }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.layout == 'page' %}{{ page.title }} — {% elsif page.title and page.layout != 'cover' %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+  <title>{% if page.title and page.layout != 'cover' %}{{ page.title }} — {% endif %}{{ site.title }}</title>
   {% seo title=false %}
   <script>try{var t=localStorage.getItem('book:theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,26 +11,23 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Noto+Naskh+Arabic:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="{{ '/assets/css/book.css' | relative_url }}">
 </head>
-{%- assign _book = site.pages | where: "layout", "page" -%}
-<body class="layout-{{ page.layout }}" data-base="{{ site.baseurl }}" data-total="{{ _book.size }}">
+{%- assign _raw = site.pages -%}
+{%- if site.book and site.book.size > 0 -%}{%- assign _raw = _raw | concat: site.book -%}{%- endif -%}
+{%- assign _book_count = 0 -%}
+{%- for p in _raw -%}
+  {%- if p.path contains ".md" and p.path != "index.md" and p.path != "contents.md" and p.path != "search.md" and p.path != "404.md" and p.path != "README.md" and p.layout != "cover" and p.layout != "toc" and p.layout != "search" -%}
+    {%- assign _book_count = _book_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+<body class="layout-{{ page.layout | default: 'page' }}" data-base="{{ site.baseurl }}" data-total="{{ _book_count }}">
   <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
-  <header class="topbar">
-    <a class="brand" href="{{ '/' | relative_url }}">📖 <span>{{ site.title }}</span></a>
-    <nav class="top-actions" aria-label="التنقل الرئيسي">
-      <a href="{{ '/contents/' | relative_url }}">الفهرس</a>
-      <span class="progress-pill" id="progress-pill" title="الصفحات المُنجَزة" hidden></span>
-      <button type="button" id="theme-toggle" class="icon-btn" aria-label="تبديل الوضع الليلي">🌓</button>
-    </nav>
-    <div class="topbar-progress" aria-hidden="true"><i id="progress-bar"></i></div>
-  </header>
+  {% include header.html %}
 
   <main id="main" class="wrap">
     {{ content }}
   </main>
 
-  <footer class="footer">
-    <p>{{ site.title }} · {{ site.author }}</p>
-  </footer>
+  {% include footer.html %}
   <script src="{{ '/assets/js/book.js' | relative_url }}" defer></script>
 </body>
 </html>

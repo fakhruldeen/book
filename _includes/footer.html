@@ -1,0 +1,105 @@
+{%- assign _legal_doc = nil -%}
+{%- assign _all_docs = site.pages -%}
+{%- if site.book and site.book.size > 0 -%}
+  {%- assign _all_docs = _all_docs | concat: site.book -%}
+{%- endif -%}
+
+{%- for doc in _all_docs -%}
+  {%- if doc.layout == 'backmatter' or doc.path contains 'colophon' or doc.path contains 'license' -%}
+    {%- assign _legal_doc = doc -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if _legal_doc == nil -%}
+  {%- for doc in _all_docs -%}
+    {%- if doc.layout == 'frontmatter' and doc.copyright_statement -%}
+      {%- assign _legal_doc = doc -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- assign copyright_holder = _legal_doc.copyright_holder | default: site.copyright.holder | default: site.author.name -%}
+{%- assign copyright_year = _legal_doc.copyright_year | default: site.copyright.year | default: site.time | date: "%Y" -%}
+{%- assign copyright_statement = _legal_doc.copyright_statement | default: site.copyright.statement -%}
+{%- assign license_name = _legal_doc.license_name | default: site.copyright.license_name | default: 'GNU General Public License v3.0' -%}
+{%- assign license_url = _legal_doc.license_url | default: site.copyright.license_url | default: 'https://www.gnu.org/licenses/gpl-3.0.html' -%}
+
+<footer class="footer" role="contentinfo">
+  <div class="footer-wrap">
+    <!-- Grid: Author, Book Info, Downloads, Social -->
+    <div class="footer-grid">
+      <!-- Column 1: Author Profile -->
+      <div class="footer-col footer-author-card">
+        <div class="author-header">
+          {% if site.author.avatar %}
+          <img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" class="author-avatar" width="64" height="64" loading="lazy">
+          {% endif %}
+          <div class="author-titles">
+            <h3 class="author-name">{{ site.author.name }}</h3>
+            {% if site.author.role %}<p class="author-role">{{ site.author.role }}</p>{% endif %}
+          </div>
+        </div>
+        {% if site.author.bio %}
+        <p class="author-bio">{{ site.author.bio }}</p>
+        {% endif %}
+        {% if site.author.location %}
+        <p class="author-location">📍 <span>{{ site.author.location }}</span></p>
+        {% endif %}
+      </div>
+
+      <!-- Column 2: Book Details & Metadata -->
+      <div class="footer-col footer-book-details">
+        <h4 class="footer-heading">عن هذا الكتاب</h4>
+        <ul class="footer-meta-list">
+          {% if site.edition %}<li><strong class="label">الطبعة:</strong> {{ site.edition }}</li>{% endif %}
+          {% if site.version %}<li><strong class="label">الإصدار:</strong> v{{ site.version }}</li>{% endif %}
+          {% if site.isbn %}<li><strong class="label">الترقيم الدولي (ISBN):</strong> <span dir="ltr">{{ site.isbn }}</span></li>{% endif %}
+          {% if site.doi %}<li><strong class="label">المعرف الرقمي (DOI):</strong> <span dir="ltr">{{ site.doi }}</span></li>{% endif %}
+          <li><strong class="label">تاريخ الإصدار العام:</strong> <span>{{ site.book_date_formatted | default: site.book_timestamp }}</span></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Formats & Downloads -->
+      <div class="footer-col footer-downloads">
+        <h4 class="footer-heading">تنزيل الكتاب بنسخ متعددة</h4>
+        <div class="download-badges">
+          {% if site.downloads.pdf %}<a href="{{ site.downloads.pdf | relative_url }}" class="dl-badge pdf" title="تنزيل نسخة PDF">📄 PDF</a>{% endif %}
+          {% if site.downloads.epub %}<a href="{{ site.downloads.epub | relative_url }}" class="dl-badge epub" title="تنزيل نسخة ePub">📱 ePub</a>{% endif %}
+          {% if site.downloads.docx %}<a href="{{ site.downloads.docx | relative_url }}" class="dl-badge docx" title="تنزيل نسخة Word Docx">📝 DOCX</a>{% endif %}
+          {% if site.downloads.mobi %}<a href="{{ site.downloads.mobi | relative_url }}" class="dl-badge mobi" title="تنزيل نسخة Kindle Mobi">📚 Mobi</a>{% endif %}
+          {% if site.downloads.source %}<a href="{{ site.downloads.source }}" class="dl-badge src" target="_blank" rel="noopener noreferrer" title="المستودع المصدري على GitHub">💻 المصدر</a>{% endif %}
+        </div>
+      </div>
+
+      <!-- Column 4: Links & Contact -->
+      <div class="footer-col footer-links">
+        <h4 class="footer-heading">التواصل والمتابعة</h4>
+        <ul class="footer-nav-links">
+          {% if site.social.github %}<li><a href="{{ site.social.github }}" target="_blank" rel="noopener noreferrer">GitHub</a></li>{% endif %}
+          {% if site.social.twitter %}<li><a href="{{ site.social.twitter }}" target="_blank" rel="noopener noreferrer">منصة X (تويتر)</a></li>{% endif %}
+          {% if site.social.linkedin %}<li><a href="{{ site.social.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>{% endif %}
+          {% if site.social.youtube %}<li><a href="{{ site.social.youtube }}" target="_blank" rel="noopener noreferrer">YouTube</a></li>{% endif %}
+          {% if site.social.telegram %}<li><a href="{{ site.social.telegram }}" target="_blank" rel="noopener noreferrer">Telegram</a></li>{% endif %}
+          {% if site.contact.email %}<li><a href="mailto:{{ site.contact.email }}">مراسلة المؤلف</a></li>{% endif %}
+          {% if site.contact.support_url %}<li><a href="{{ site.contact.support_url }}" target="_blank" rel="noopener noreferrer">إبلاغ عن خطأ أو اقتراح</a></li>{% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Legal Notice (Fetched from Backmatter / Frontmatter / Config) -->
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <p class="copyright-line">
+          © {{ copyright_year }} <strong>{{ copyright_holder }}</strong>. {{ copyright_statement }}
+        </p>
+        <p class="license-line">
+          مرخص بموجب: <a href="{{ license_url }}" target="_blank" rel="noopener noreferrer" class="license-link">{{ license_name }}</a>
+          {% if _legal_doc %}
+          · <a href="{{ _legal_doc.url | relative_url }}" class="colophon-link">وثيقة الحقوق والترخيص والبيانات الطباعية الكاملة</a>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

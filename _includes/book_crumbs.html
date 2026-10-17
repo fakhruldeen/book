@@ -1,0 +1,19 @@
+<ol class="crumbs" aria-label="مسار الصفحة">
+  <li><a href="{{ '/contents/' | relative_url }}">الفهرس</a></li>
+  {%- assign _clean = page.path | remove_first: "_book/" | remove: ".md" -%}
+  {%- assign _segs = _clean | split: "/" -%}
+  {%- assign _acc = "" -%}
+  {%- for s in _segs -%}
+    {%- if forloop.first -%}{%- assign _acc = s -%}{%- else -%}{%- assign _acc = _acc | append: "/" | append: s -%}{%- endif -%}
+    {%- assign _target = _acc | append: ".md" -%}
+    {%- assign _coll_target = "_book/" | append: _target -%}
+    {%- unless forloop.last -%}
+      {%- for p in include.book -%}
+        {%- if p.path == _target or p.path == _coll_target -%}
+          <li><a href="{{ p.url | relative_url }}">{{ p.title }}</a></li>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+  {%- endfor -%}
+  <li aria-current="page">{{ page.title }}</li>
+</ol>

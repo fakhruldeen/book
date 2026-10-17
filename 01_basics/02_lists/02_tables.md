@@ -1,5 +1,9 @@
 ---
+layout: subsection
 title: الجداول
+slug: "02-tables"
+permalink: /01_basics/02_lists/02_tables.html
+published: true
 quiz:
   - type: mcq
     q: "ما الذي يفصل رأس الجدول عن جسمه في Markdown؟"

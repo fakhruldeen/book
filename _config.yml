@@ -1,36 +1,135 @@
-# ---------- Book identity ----------
+# ==============================================================================
+# Book Configuration (_config.yml)
+# Standard Jekyll Book Theme Configuration
+# Reference: https://jekyllrb.com/docs/configuration/options/
+# ==============================================================================
+
+# ---------- Book Identity & Metadata ----------
 title: "كتاب Markdown التفاعلي ومختبر الطباعة العربية"
 subtitle: "دليلك الشامل لبناء الكتب العربية التفاعلية واختبارات الطباعة على GitHub Pages"
-description: "قالب كتاب عربي تفاعلي مبني بـ Jekyll وMarkdown مخصص لـ GitHub Pages، يتضمن اختبارات الطباعة العربية والتنضيد، ومخططات Mermaid، والمعادلات، والاختبارات القصيرة التفاعلية."
-author: "Mohamed Fakhruldeen"
-lang: ar
+description: "قالب كتاب عربي تفاعلي متكامل مبني بـ Jekyll وMarkdown مخصص لـ GitHub Pages، يتضمن اختبارات الطباعة والتنضيد، ومخططات Mermaid، والمعادلات، ونظام الاختبارات القصيرة التفاعلية."
+tagline: "قالب قياسي لنشر الكتب العربية الرقمية التفاعلية على شبكة الويب"
+edition: "الطبعة الأولى 1.0"
+version: "1.0.0"
+isbn: "978-0-2026-0001-8"
+doi: "10.1000/182-arabic-book-theme"
+lang: "ar"
+dir: "rtl"
 
-# ---------- Deployment ----------
+# Full book publication timestamp (adjustable from config and used across front/back matter)
+book_timestamp: "2026-10-18T00:00:00+03:00"
+book_date_formatted: "الأحد، ٦ جمادى الأولى ١٤٤٨ هـ / ١٨ أكتوبر ٢٠٢٦ م"
+
+# ---------- Author Profile ----------
+author:
+  name: "محمد فخر الدين"
+  latin_name: "Mohamed Fakhruldeen"
+  email: "fakhruldeen@gmail.com"
+  bio: "مؤلف ومطور برمجيات متخصص في بناء المنصات الرقمية وهندسة النظم الموزعة ونشر المحتوى التفاعلي."
+  role: "المؤلف والمهندس الرئيسي"
+  avatar: "/assets/images/author.svg"
+  website: "https://fakhr.me"
+  location: "الرياض، المملكة العربية السعودية"
+
+# ---------- Social Links & Contacts ----------
+social:
+  github: "https://github.com/fakhruldeen"
+  twitter: "https://x.com/fakhruldeen"
+  linkedin: "https://linkedin.com/in/fakhruldeen"
+  youtube: "https://youtube.com/@fakhruldeen"
+  telegram: "https://t.me/fakhruldeen"
+
+contact:
+  email: "fakhruldeen@gmail.com"
+  website: "https://fakhr.me"
+  support_url: "https://github.com/fakhruldeen/book/issues"
+
+# ---------- Book Formats & Downloads ----------
+downloads:
+  pdf: "/assets/downloads/book.pdf"
+  epub: "/assets/downloads/book.epub"
+  docx: "/assets/downloads/book.docx"
+  mobi: "/assets/downloads/book.mobi"
+  source: "https://github.com/fakhruldeen/book"
+  web: "https://fakhr.me/book/"
+
+# ---------- Copyright & Licensing ----------
+copyright:
+  year: 2026
+  holder: "محمد فخر الدين (Mohamed Fakhruldeen)"
+  statement: "جميع الحقوق محفوظة للمؤلف © 2026. المحتوى متاح بموجب رخصة المشاع الإبداعي والبرمجيات برخصة جنو العمومية."
+  license_name: "GNU General Public License v3.0 (GPL-3.0)"
+  license_url: "https://www.gnu.org/licenses/gpl-3.0.html"
+  fetch_from: "frontmatter"   # Options: frontmatter, backmatter, config
+
+# ---------- Deployment Settings ----------
 # User/organisation site  (user.github.io):      baseurl: ""
 # Project site (user.github.io/book):            baseurl: "/book"
 baseurl: "/book"
 url: "https://fakhruldeen.github.io"
 
-# ---------- Quiz ----------
-quiz_pass_percent: 80     # score needed to "unlock" the next-page button (never mandatory)
+# ---------- Quiz Settings ----------
+quiz_pass_percent: 80         # Score threshold to highlight the next button
 
-# ---------- Build (all supported on GitHub Pages) ----------
+# ---------- Jekyll Standard Environment & Build Options ----------
+# Reference: https://jekyllrb.com/docs/configuration/options/
+timezone: "Asia/Riyadh"
+encoding: "utf-8"
 markdown: kramdown
+highlighter: rouge
+excerpt_separator: "\n\n"
+incremental: false
+strict_front_matter: false
+
 kramdown:
   input: GFM
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     guess_lang: true
   math_engine: mathjax
-  parse_block_html: true   # Markdown inside <details> works without markdown="1"
+  parse_block_html: true
 
+# ---------- Collections Configuration ----------
+# Reference: https://jekyllrb.com/docs/collections/
+collections:
+  book:
+    output: true
+    permalink: /:collection/:path/
+
+# ---------- Plugins (Official GitHub Pages Whitelist) ----------
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jemoji                  # :emoji: shortcodes like GitHub
+  - jemoji
 
+# ---------- Front Matter Defaults ----------
 defaults:
-  - scope: { path: "" }
-    values: { layout: "page" }   # every numbered .md is a book page
+  - scope:
+      path: ""
+    values:
+      layout: "page"
+      published: true
+      author: "محمد فخر الدين"
+  - scope:
+      path: "_book"
+    values:
+      layout: "section"
+      published: true
+  - scope:
+      path: "frontmatter"
+    values:
+      layout: "frontmatter"
+      published: true
+  - scope:
+      path: "backmatter"
+    values:
+      layout: "backmatter"
+      published: true
 
-exclude: [Gemfile, Gemfile.lock, README.md, node_modules, vendor, tools]
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - node_modules
+  - vendor
+  - tools

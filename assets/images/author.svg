@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="48" fill="#0b6e63" stroke="#e4dfd2" stroke-width="2"/>
+  <circle cx="50" cy="38" r="18" fill="#ffffff" opacity="0.9"/>
+  <path d="M 22 84 Q 50 56 78 84" fill="#ffffff" opacity="0.9"/>
+  <text x="50" y="44" font-family="sans-serif" font-size="14" font-weight="bold" fill="#0b6e63" text-anchor="middle">م.ف</text>
+</svg>

@@ -1,0 +1,35 @@
+---
+layout: default
+---
+<div class="page-shell frontmatter-shell" id="page-shell">
+  {% include page_toc.html %}
+
+  <article class="content frontmatter-content node-type-frontmatter">
+    <ol class="crumbs" aria-label="مسار الصفحة">
+      <li><a href="{{ '/' | relative_url }}">الغلاف</a></li>
+      <li><a href="{{ '/contents/' | relative_url }}">الفهرس</a></li>
+      <li aria-current="page">{{ page.title }}</li>
+    </ol>
+
+    <header class="node-head frontmatter-head">
+      <span class="node-badge badge-frontmatter">تصدير الكتاب · Front Matter</span>
+      <h1 class="node-title" id="top">{{ page.title }}</h1>
+      <div class="frontmatter-meta">
+        <span class="fm-date">📅 تاريخ إصدار الكتاب: <strong>{{ site.book_date_formatted | default: site.book_timestamp }}</strong></span>
+        {% if site.edition %}<span class="fm-edition">📖 {{ site.edition }}</span>{% endif %}
+        {% if site.author.name %}<span class="fm-author">✍️ {{ site.author.name }}</span>{% endif %}
+      </div>
+    </header>
+
+    <div class="md">
+      {{ content }}
+    </div>
+
+    {% include page_meta.html %}
+
+    <nav class="pager frontmatter-pager" aria-label="التنقل">
+      <a class="pager-btn prev" href="{{ '/' | relative_url }}"><small>السابق</small><span>الغلاف</span></a>
+      <a class="pager-btn next" href="{{ '/contents/' | relative_url }}"><small>التالي</small><span>فهرس الموضوعات</span></a>
+    </nav>
+  </article>
+</div>

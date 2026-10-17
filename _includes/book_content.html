@@ -1,0 +1,84 @@
+{%- comment -%}
+  Modular Book Content Template
+  Handles chapters, sections, subsections, subsubsections, subsubsubsections, etc.
+{%- endcomment -%}
+{%- assign raw_docs = site.pages -%}
+{%- if site.book and site.book.size > 0 -%}
+  {%- assign raw_docs = raw_docs | concat: site.book -%}
+{%- endif -%}
+
+{%- assign book_list = "" | split: "" -%}
+{%- for p in raw_docs -%}
+  {%- if p.path contains ".md" and p.path != "index.md" and p.path != "contents.md" and p.path != "search.md" and p.path != "404.md" and p.path != "README.md" and p.layout != "cover" and p.layout != "toc" and p.layout != "search" -%}
+    {%- assign book_list = book_list | push: p -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign book_list = book_list | sort: "path" -%}
+
+{%- capture num -%}
+  {%- if page.num -%}
+    {{ page.num }}
+  {%- else -%}
+    {%- include num.html path=page.path -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign num = num | strip -%}
+
+{%- assign segs = page.path | remove_first: "_book/" | remove: ".md" | split: "/" -%}
+{%- assign depth = segs.size -%}
+{%- assign default_level = depth | plus: 1 -%}
+{%- if default_level > 6 -%}{%- assign default_level = 6 -%}{%- endif -%}
+{%- assign level = include.level | default: page.level | default: default_level -%}
+{%- assign badge = include.badge | default: page.badge -%}
+{%- assign pass = page.pass | default: site.quiz_pass_percent | default: 80 -%}
+
+{%- assign idx = -1 -%}
+{%- for p in book_list -%}
+  {%- if p.path == page.path or p.url == page.url -%}
+    {%- assign idx = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign pi = idx | minus: 1 -%}
+{%- assign ni = idx | plus: 1 -%}
+{%- if idx > 0 -%}{%- assign prev = book_list[pi] -%}{%- else -%}{%- assign prev = nil -%}{%- endif -%}
+{%- if ni < book_list.size -%}{%- assign next = book_list[ni] -%}{%- else -%}{%- assign next = nil -%}{%- endif -%}
+
+<div class="page-shell" id="page-shell">
+  {% include page_toc.html %}
+
+  <article class="content node-content node-type-{{ include.layout | default: page.layout | default: 'page' }}" data-num="{{ num }}" data-level="{{ level }}">
+    {% include book_crumbs.html book=book_list %}
+
+    <header class="node-head">
+      {% if badge and badge != "" %}
+      <span class="node-badge badge-{{ include.layout | default: page.layout }}">{{ badge }}</span>
+      {% endif %}
+      <h{{ level }} class="node-title" id="top">
+        {% if num and num != "" %}<span class="node-num" dir="ltr">{{ num }}</span>{% endif %}
+        <span class="title-text">{{ page.title }}</span>
+      </h{{ level }}>
+    </header>
+
+    <div class="md">
+      {{ content }}
+    </div>
+
+    {%- if page.quiz -%}
+    <section class="quiz" id="quiz" data-pass="{{ pass }}" aria-labelledby="quiz-title">
+      <div class="quiz-head">
+        <span class="quiz-badge">اختبار قصير</span>
+        <div id="quiz-title" class="quiz-title" role="heading" aria-level="{{ level | plus: 1 }}">اختبر فهمك للقسم {{ num }}</div>
+        <p class="quiz-note">النجاح بنسبة {{ pass }}٪ أو أكثر يُفعِّل زر الصفحة التالية. الاختبار اختياري ويمكنك التخطي في أي وقت.</p>
+      </div>
+      <div id="quiz-root"></div>
+      <script type="application/json" id="quiz-data">{{ page.quiz | jsonify }}</script>
+      <noscript><p>الاختبار يحتاج إلى تفعيل JavaScript.</p></noscript>
+    </section>
+    {%- endif -%}
+
+    {% include page_meta.html %}
+
+    {% include book_pager.html prev=prev next=next pass=pass %}
+  </article>
+</div>

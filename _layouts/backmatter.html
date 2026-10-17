@@ -1,0 +1,35 @@
+---
+layout: default
+---
+<div class="page-shell backmatter-shell" id="page-shell">
+  {% include page_toc.html %}
+
+  <article class="content backmatter-content node-type-backmatter">
+    <ol class="crumbs" aria-label="مسار الصفحة">
+      <li><a href="{{ '/' | relative_url }}">الغلاف</a></li>
+      <li><a href="{{ '/contents/' | relative_url }}">الفهرس</a></li>
+      <li aria-current="page">{{ page.title }}</li>
+    </ol>
+
+    <header class="node-head backmatter-head">
+      <span class="node-badge badge-backmatter">خاتمة وملحقات · Back Matter</span>
+      <h1 class="node-title" id="top">{{ page.title }}</h1>
+      <div class="backmatter-meta">
+        <span class="bm-date">📅 تاريخ اعتماد الإصدار: <strong>{{ site.book_date_formatted | default: site.book_timestamp }}</strong></span>
+        {% if site.isbn %}<span class="bm-isbn">الترقيم الدولي: <code dir="ltr">{{ site.isbn }}</code></span>{% endif %}
+        {% if site.version %}<span class="bm-ver">الإصدار: <code>v{{ site.version }}</code></span>{% endif %}
+      </div>
+    </header>
+
+    <div class="md">
+      {{ content }}
+    </div>
+
+    {% include page_meta.html %}
+
+    <nav class="pager backmatter-pager" aria-label="التنقل">
+      <a class="pager-btn prev" href="{{ '/contents/' | relative_url }}"><small>السابق</small><span>فهرس الموضوعات</span></a>
+      <a class="pager-btn next" href="{{ '/' | relative_url }}"><small>البداية</small><span>غلاف الكتاب</span></a>
+    </nav>
+  </article>
+</div>

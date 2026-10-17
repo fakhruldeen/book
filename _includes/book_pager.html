@@ -1,0 +1,19 @@
+{%- assign prev = include.prev -%}
+{%- assign next = include.next -%}
+{%- assign pass = include.pass | default: site.quiz_pass_percent | default: 80 -%}
+<nav class="pager" aria-label="التنقل بين الصفحات">
+  {%- if prev -%}
+  <a class="pager-btn prev" rel="prev" href="{{ prev.url | relative_url }}"><small>السابق</small><span>{{ prev.title }}</span></a>
+  {%- else -%}
+  <a class="pager-btn prev" href="{{ '/' | relative_url }}"><small>البداية</small><span>الغلاف</span></a>
+  {%- endif -%}
+  {%- if next -%}
+  <a id="next-link" class="pager-btn next" rel="next" href="{{ next.url | relative_url }}" data-locked-hint="يُفتح عند {{ pass }}٪ — أو تخطَّ" data-open-hint="أحسنت! تابع القراءة">
+    <small><span class="lock" aria-hidden="true">🔒</span> التالي</small><span>{{ next.title }}</span><em class="hint"></em>
+  </a>
+  {%- else -%}
+  <a id="next-link" class="pager-btn next" href="{{ '/contents/' | relative_url }}" data-locked-hint="يُفتح عند {{ pass }}٪ — أو تخطَّ" data-open-hint="أنهيت الكتاب 🎉">
+    <small><span class="lock" aria-hidden="true">🔒</span> النهاية</small><span>العودة إلى الفهرس</span><em class="hint"></em>
+  </a>
+  {%- endif -%}
+</nav>

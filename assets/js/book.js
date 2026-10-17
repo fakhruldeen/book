@@ -443,9 +443,199 @@
     draw();
   }
 
+  /* ---------- Page SHA-256 Checksum ---------- */
+  async function initPageChecksum() {
+    const shaEl = $('.page-sha');
+    if (!shaEl) return;
+    if (shaEl.dataset.sha && shaEl.dataset.sha.trim() !== '') {
+      shaEl.textContent = shaEl.dataset.sha;
+      return;
+    }
+    const content = $('.content');
+    if (!content) return;
+    try {
+      const text = (content.innerText || content.textContent || '').trim();
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      shaEl.textContent = hashHex.slice(0, 16);
+      shaEl.setAttribute('title', `SHA-256: ${hashHex} (انقر لنسخ البصمة كاملة)`);
+      shaEl.style.cursor = 'pointer';
+      shaEl.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(hashHex);
+          const old = shaEl.textContent;
+          shaEl.textContent = 'تم النسخ ✓';
+          setTimeout(() => (shaEl.textContent = old), 1500);
+        } catch (e) { /* ignore */ }
+      });
+    } catch (e) {
+      shaEl.textContent = 'غير متوفر';
+    }
+  }
+
+  /* ---------- Client-side Search Engine ---------- */
+  function initSearch() {
+    const searchInput = $('#book-search-input');
+    const searchResults = $('#book-search-results');
+    const searchStats = $('#book-search-stats');
+    const searchClear = $('#book-search-clear');
+    if (!searchInput || !searchResults) return;
+
+    let indexData = null;
+    let isLoading = false;
+    const base = document.body.dataset.base || '';
+
+    const fetchIndex = async () => {
+      if (indexData) return indexData;
+      if (isLoading) return [];
+      isLoading = true;
+      try {
+        const res = await fetch(`${base}/search.json`);
+        indexData = await res.json();
+        return indexData;
+      } catch (e) {
+        console.warn('Search index load failed', e);
+        return [];
+      } finally {
+        isLoading = false;
+      }
+    };
+
+    const normalizeArabic = text => (text || '')
+      .toLowerCase()
+      .replace(/[\u064B-\u065F\u0670]/g, '')
+      .replace(/[إأآا]/g, 'ا')
+      .replace(/ى/g, 'ي')
+      .replace(/ة/g, 'ه')
+      .replace(/[\s\t\n]+/g, ' ')
+      .trim();
+
+    const highlightMatch = (text, term) => {
+      if (!term || !text) return text;
+      const cleanTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${cleanTerm})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    };
+
+    let debounceTimer = null;
+    const renderResults = (matches, query) => {
+      searchResults.replaceChildren();
+      if (searchClear) searchClear.hidden = !query;
+
+      if (!query.trim()) {
+        if (searchStats) searchStats.textContent = '';
+        searchResults.append(el('p', { class: 'search-empty-prompt', text: 'أدخل كلمة البحث في الحقل أعلاه لعرض النتائج الفورية.' }));
+        return;
+      }
+
+      if (searchStats) {
+        searchStats.textContent = matches.length
+          ? `عُثر على ${matches.length} نتيجة مطابقة لعبارة: «${query}»`
+          : `لم يتم العثور على أي نتائج تطابق: «${query}»`;
+      }
+
+      if (!matches.length) {
+        searchResults.append(
+          el('div', { class: 'search-no-results' },
+            el('p', { text: 'جرّب استخدام كلمات مرادفة أو تقليل عدد الكلمات المدخلة.' })
+          )
+        );
+        return;
+      }
+
+      const list = el('ul', { class: 'search-results-list' });
+      matches.forEach(({ item }) => {
+        const li = el('li', { class: 'search-result-item' });
+        const a = el('a', { href: item.url, class: 'search-result-link' });
+        
+        const head = el('div', { class: 'result-head' });
+        if (item.num) head.append(el('span', { class: 'result-num', dir: 'ltr', text: item.num }));
+        head.append(el('h3', { class: 'result-title', text: item.title }));
+        if (item.layout) head.append(el('span', { class: `result-layout-badge badge-${item.layout}`, text: item.layout }));
+
+        const snippet = el('p', { class: 'result-snippet' });
+        snippet.innerHTML = highlightMatch(item.content || '', query.split(' ')[0] || '');
+
+        a.append(head, snippet);
+        li.append(a);
+        list.append(li);
+      });
+      searchResults.append(list);
+    };
+
+    const doSearch = async () => {
+      const q = searchInput.value;
+      const query = q.trim();
+      if (!query) {
+        renderResults([], '');
+        return;
+      }
+      const data = await fetchIndex();
+      const normQ = normalizeArabic(query);
+      const terms = normQ.split(' ').filter(Boolean);
+
+      const matches = [];
+      for (const item of data) {
+        const normTitle = normalizeArabic(item.title);
+        const normContent = normalizeArabic(item.content);
+        let score = 0;
+        let matched = true;
+
+        for (const t of terms) {
+          if (normTitle.includes(t)) {
+            score += 15;
+          } else if (normContent.includes(t)) {
+            score += 3;
+          } else {
+            matched = false;
+            break;
+          }
+        }
+
+        if (matched) {
+          matches.push({ item, score });
+        }
+      }
+
+      matches.sort((a, b) => b.score - a.score);
+      renderResults(matches, query);
+    };
+
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(doSearch, 150);
+    });
+
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        renderResults([], '');
+      });
+    }
+
+    // Pre-fetch index when search input is focused or present
+    searchInput.addEventListener('focus', fetchIndex, { once: true });
+    if (window.location.pathname.includes('/search')) {
+      fetchIndex();
+    }
+  }
+
   /* ---------- boot ---------- */
   const boot = () => {
-    enhance(); initReadingProgress(); initPageTOC(); collectMermaid(); progressUI(); initQuiz(); loadMath(); renderMermaid();
+    enhance();
+    initReadingProgress();
+    initPageTOC();
+    collectMermaid();
+    progressUI();
+    initQuiz();
+    initPageChecksum();
+    initSearch();
+    loadMath();
+    renderMermaid();
   };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
 })();
