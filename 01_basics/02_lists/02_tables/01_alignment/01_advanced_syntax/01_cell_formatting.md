@@ -2,7 +2,7 @@
 layout: subsubsubsubsection
 title: "تنسيق الخلايا الفردية والحدود"
 slug: "cell-formatting"
-permalink: /01_basics/02_lists/02_tables/01_alignment/01_advanced_syntax/01_cell_formatting.html
+permalink: /01_basics/02_lists/02_tables/01_alignment/01_advanced_syntax/01_cell_formatting/
 published: true
 author: "محمد فخر الدين"
 date: 2026-10-18T00:00:00+03:00

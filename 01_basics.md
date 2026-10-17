@@ -2,7 +2,7 @@
 layout: chapter
 title: الأساسيات
 slug: "01-basics"
-permalink: /01_basics.html
+permalink: /01_basics/
 published: true
 quiz:
   - type: mcq

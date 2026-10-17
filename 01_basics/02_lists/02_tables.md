@@ -2,7 +2,7 @@
 layout: subsection
 title: الجداول
 slug: "02-tables"
-permalink: /01_basics/02_lists/02_tables.html
+permalink: /01_basics/02_lists/02_tables/
 published: true
 quiz:
   - type: mcq

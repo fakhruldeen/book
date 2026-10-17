@@ -2,7 +2,7 @@
 layout: section
 title: تنسيق النص
 slug: "01-text"
-permalink: /01_basics/01_text.html
+permalink: /01_basics/01_text/
 published: true
 quiz:
   - type: mcq

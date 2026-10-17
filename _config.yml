@@ -80,6 +80,7 @@ highlighter: rouge
 excerpt_separator: "\n\n"
 incremental: false
 strict_front_matter: false
+permalink: pretty            # Clean URLs without .html (Directory / Pretty style)
 
 kramdown:
   input: GFM

@@ -2,7 +2,7 @@
 layout: backmatter
 title: "بيانات النشر والترخيص والتنضيد (Colophon)"
 slug: "colophon"
-permalink: /backmatter/colophon.html
+permalink: /backmatter/colophon/
 published: true
 author: "محمد فخر الدين"
 date: 2026-10-18T00:00:00+03:00

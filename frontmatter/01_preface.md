@@ -2,7 +2,7 @@
 layout: frontmatter
 title: "المقدمة والتصدير"
 slug: "preface"
-permalink: /frontmatter/preface.html
+permalink: /frontmatter/preface/
 published: true
 author: "محمد فخر الدين"
 date: 2026-10-18T00:00:00+03:00
@@ -26,4 +26,4 @@ date: 2026-10-18T00:00:00+03:00
 > [!NOTE]
 > تاريخ إصدار هذه النسخة من الكتاب وفق إعدادات التكوين: **{{ site.book_date_formatted | default: site.book_timestamp }}**.
 
-يمكنك الانتقال مباشرة إلى [الفصل الأول: الأساسيات]({{ '/01_basics.html' | relative_url }}) أو تصفح [فهرس الموضوعات]({{ '/contents/' | relative_url }}).
+يمكنك الانتقال مباشرة إلى [الفصل الأول: الأساسيات]({{ '/01_basics/' | relative_url }}) أو تصفح [فهرس الموضوعات]({{ '/contents/' | relative_url }}).
