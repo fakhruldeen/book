@@ -10,10 +10,14 @@
     {%- unless forloop.last -%}
       {%- for p in include.book -%}
         {%- if p.path == _target or p.path == _coll_target -%}
-          <li><a href="{{ p.url | relative_url }}">{{ p.title }}</a></li>
+          {%- capture p_num -%}{% if p.num %}{{ p.num }}{% else %}{% include num.html path=p.path %}{% endif %}{%- endcapture -%}
+          {%- assign p_num = p_num | strip -%}
+          <li><a href="{{ p.url | relative_url }}">{% if p_num != "" %}<span class="crumb-num" dir="ltr">{{ p_num }}</span> {% endif %}{{ p.title }}</a></li>
         {%- endif -%}
       {%- endfor -%}
     {%- endunless -%}
   {%- endfor -%}
-  <li aria-current="page">{{ page.title }}</li>
+  {%- capture cur_num -%}{% if page.num %}{{ page.num }}{% else %}{% include num.html path=page.path %}{% endif %}{%- endcapture -%}
+  {%- assign cur_num = cur_num | strip -%}
+  <li aria-current="page">{% if cur_num != "" %}<span class="crumb-num" dir="ltr">{{ cur_num }}</span> {% endif %}{{ page.title }}</li>
 </ol>

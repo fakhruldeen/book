@@ -91,11 +91,12 @@ a:hover { text-decoration-thickness: 2px; }
 .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .5s; }
 .cover-content:empty { display: none; }
 
-/* ===== Page chrome ===== */
-.crumbs { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 0; margin: 0 0 18px; padding: 0; font-family: var(--font-ui); font-size: 14px; color: var(--muted); line-height: 1.8; }
-.crumbs li + li::before { content: "‹"; margin-inline: 8px; color: var(--line); }
+.crumbs { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; margin: 0 0 18px; padding: 0; font-family: var(--font-ui); font-size: 14px; color: var(--text); line-height: 1.8; }
+.crumbs li + li::before { content: "<"; margin-inline: 8px; color: var(--text); font-weight: 700; font-family: var(--font-code), monospace; }
 .crumbs a { color: var(--muted); text-decoration: none; }
 .crumbs a:hover { color: var(--accent); }
+.crumbs [aria-current="page"] { color: var(--text); font-weight: 600; }
+.crumb-num { font-family: var(--font-code); font-weight: 700; color: var(--accent); margin-inline-end: 4px; }
 .node-head { border-bottom: 1px solid var(--line); margin-bottom: 20px; padding-bottom: 10px; }
 .node-title { font-family: var(--font-ui); font-weight: 800; line-height: 1.5; margin: 0; }
 h2.node-title { font-size: 2.1rem; } h3.node-title { font-size: 1.8rem; } h4.node-title { font-size: 1.55rem; } h5.node-title { font-size: 1.35rem; }
