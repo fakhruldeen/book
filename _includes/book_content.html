@@ -77,6 +77,8 @@
     </section>
     {%- endif -%}
 
+    {% include book_children.html book=book_list badge=badge %}
+
     {% include page_meta.html %}
 
     {% include book_pager.html prev=prev next=next pass=pass %}

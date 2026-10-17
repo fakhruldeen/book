@@ -1,0 +1,77 @@
+{%- assign _clean_parent = page.path | remove_first: "_book/" | remove: ".md" -%}
+{%- assign _folder_prefix = _clean_parent | append: "/" -%}
+{%- assign _coll_folder_prefix = "_book/" | append: _folder_prefix -%}
+{%- assign parent_segs = _clean_parent | split: "/" -%}
+{%- assign expected_depth = parent_segs.size | plus: 1 -%}
+
+{%- assign direct_children = "" | split: "" -%}
+{%- for p in include.book -%}
+  {%- assign p_clean = p.path | remove_first: "_book/" | remove: ".md" -%}
+  {%- assign p_segs = p_clean | split: "/" -%}
+  {%- if p_segs.size == expected_depth -%}
+    {%- if p.path contains _folder_prefix or p.path contains _coll_folder_prefix -%}
+      {%- assign direct_children = direct_children | push: p -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if direct_children.size > 0 -%}
+<section class="node-children-nav" aria-label="أقسام وفروع هذا المحتوى">
+  <div class="children-header">
+    <h3 class="children-title">
+      <span class="children-title-icon" aria-hidden="true">📑</span>
+      <span>
+        {% if include.badge == "فصل" %}
+          أقسام هذا الفصل
+        {% elsif include.badge == "قسم" %}
+          الأقسام الفرعية التابعة لهذا القسم
+        {% elsif include.badge == "قسم فرعي" %}
+          بنود هذا القسم الفرعي
+        {% elsif include.badge == "بند فرعي" %}
+          النقاط التفصيلية التابعة لهذا البند
+        {% elsif include.badge and include.badge != "" %}
+          المحتويات التابعة لـ ({{ include.badge }})
+        {% else %}
+          الأقسام والمحتويات الفرعية
+        {% endif %}
+      </span>
+      <span class="children-count">{{ direct_children.size }}</span>
+    </h3>
+    <p class="children-subtitle">يمكنك الانتقال المباشر لأي من الأقسام التالية أو متابعة القراءة بالتسلسل:</p>
+  </div>
+  <ul class="children-grid">
+    {%- for child in direct_children -%}
+      {%- capture c_num -%}
+        {%- if child.num -%}{{ child.num }}{%- else -%}{%- include num.html path=child.path -%}{%- endif -%}
+      {%- endcapture -%}
+      {%- assign c_num = c_num | strip -%}
+      {%- assign c_clean = child.path | remove_first: "_book/" | remove: ".md" -%}
+      {%- assign c_seg = c_clean | split: "/" | last -%}
+      {%- assign local_num = "" -%}
+      {%- if c_seg contains "_" -%}
+        {%- assign _candidate = c_seg | split: "_" | first -%}
+        {%- assign _first_char = _candidate | slice: 0, 1 -%}
+        {%- if "0123456789" contains _first_char -%}
+          {%- assign local_num = _candidate -%}
+        {%- endif -%}
+      {%- endif -%}
+      <li class="child-grid-item">
+        <a href="{{ child.url | relative_url }}" class="child-card">
+          <div class="child-card-main">
+            {% if c_num != "" %}
+            <span class="child-card-num" dir="ltr" title="الترقيم المرجعي: {{ c_num }}">{{ c_num }}</span>
+            {% endif %}
+            <div class="child-card-text">
+              <span class="child-card-title">{{ child.title }}</span>
+              {% if child.badge or child.layout %}
+              <span class="child-card-badge badge-{{ child.layout }}">{{ child.badge | default: child.layout }}</span>
+              {% endif %}
+            </div>
+          </div>
+          <span class="child-card-arrow" aria-hidden="true">←</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif -%}
