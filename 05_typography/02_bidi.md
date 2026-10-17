@@ -40,7 +40,7 @@ quiz:
 اختبار ظهور مسارات الأنظمة والروابط التي تحوي شُرطاً مائلة ونقاطاً:
 
 - المسار الرئيسي للأنماط هو `assets/css/book.css` ويتم استدعاؤه تلقائيًا.
-- قالب الصفحة الفردية يقع في `_layouts/page.html` ويتصل مع `_includes/num.html`.
+- قالب الصفحة الفردية يقع في `_layouts/page.html` ويتصل مع قوالب `_layouts/` المعيارية (`chapter`, `section`, `subsection`, إلخ) ومكونات `_includes/` (`header.html`, `footer.html`, `page_meta.html`, `book_crumbs.html`).
 - الرابط الكامل لواجهة البرمجة: `https://api.github.com/repos/fakhruldeen/book/pages` متبوعًا بنقطة النهاية.
 
 ---
