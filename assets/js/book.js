@@ -184,7 +184,7 @@
   function initPageTOC() {
     if (!md) return;
     const headings = $$('h2, h3, h4, h5', md);
-    if (headings.length < 2) return;
+    if (headings.length < 1) return;
 
     const shell = $('#page-shell');
     const aside = $('#page-toc');
@@ -202,6 +202,7 @@
 
     if (aside && nav && shell) {
       aside.hidden = false;
+      shell.classList.add('has-toc');
       if (wrap) wrap.classList.add('has-toc');
 
       try {
@@ -209,6 +210,10 @@
           shell.classList.add('toc-hidden');
           if (wrap) wrap.classList.add('toc-hidden');
           if (reopenBtn) reopenBtn.hidden = false;
+        } else {
+          shell.classList.remove('toc-hidden');
+          if (wrap) wrap.classList.remove('toc-hidden');
+          if (reopenBtn) reopenBtn.hidden = true;
         }
       } catch (e) {}
 
