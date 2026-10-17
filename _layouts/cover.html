@@ -1,0 +1,21 @@
+---
+layout: default
+---
+{%- assign _first = site.pages | where: "layout", "page" | sort: "path" | first -%}
+<section class="cover">
+  <div class="cover-card">
+    <p class="cover-kicker">كتاب تفاعلي</p>
+    <h1>{{ site.title }}</h1>
+    <p class="cover-sub">{{ site.subtitle }}</p>
+    <p class="cover-author">{{ site.author }}</p>
+    <div class="cover-actions">
+      {% if _first %}<a class="btn primary" id="start-btn" href="{{ _first.url | relative_url }}">ابدأ القراءة</a>{% endif %}
+      <a class="btn" href="{{ '/contents/' | relative_url }}">الفهرس</a>
+    </div>
+    <div class="cover-progress" id="cover-progress" hidden>
+      <div class="bar"><i></i></div>
+      <span></span>
+    </div>
+  </div>
+</section>
+<div class="content cover-content">{{ content }}</div>

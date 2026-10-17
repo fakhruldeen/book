@@ -1,0 +1,36 @@
+# ---------- Book identity ----------
+title: "كتاب Markdown التفاعلي ومختبر الطباعة العربية"
+subtitle: "دليلك الشامل لبناء الكتب العربية التفاعلية واختبارات الطباعة على GitHub Pages"
+description: "قالب كتاب عربي تفاعلي مبني بـ Jekyll وMarkdown مخصص لـ GitHub Pages، يتضمن اختبارات الطباعة العربية والتنضيد، ومخططات Mermaid، والمعادلات، والاختبارات القصيرة التفاعلية."
+author: "Mohamed Fakhruldeen"
+lang: ar
+
+# ---------- Deployment ----------
+# User/organisation site  (user.github.io):      baseurl: ""
+# Project site (user.github.io/book):            baseurl: "/book"
+baseurl: "/book"
+url: "https://fakhruldeen.github.io"
+
+# ---------- Quiz ----------
+quiz_pass_percent: 80     # score needed to "unlock" the next-page button (never mandatory)
+
+# ---------- Build (all supported on GitHub Pages) ----------
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    guess_lang: true
+  math_engine: mathjax
+  parse_block_html: true   # Markdown inside <details> works without markdown="1"
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jemoji                  # :emoji: shortcodes like GitHub
+
+defaults:
+  - scope: { path: "" }
+    values: { layout: "page" }   # every numbered .md is a book page
+
+exclude: [Gemfile, Gemfile.lock, README.md, node_modules, vendor, tools]

@@ -1,0 +1,21 @@
+---
+layout: default
+---
+{%- assign book = site.pages | where: "layout", "page" | sort: "path" -%}
+<article class="content toc-page">
+  <h1>{{ page.title }}</h1>
+  {{ content }}
+  <div class="toc-tools">
+    <input id="toc-filter" type="search" placeholder="ابحث في الفهرس…" aria-label="ابحث في الفهرس">
+    <span class="legend">✓ = اجتزت الاختبار بنسبة {{ site.quiz_pass_percent }}٪ أو أكثر</span>
+  </div>
+  <ul class="toc" id="toc">
+  {%- for p in book -%}
+    {%- capture n -%}{% include num.html path=p.path %}{%- endcapture -%}
+    {%- assign parts = n | strip | split: "." -%}
+    <li class="toc-item d{{ parts.size }}" data-num="{{ n | strip }}">
+      <a href="{{ p.url | relative_url }}"><span class="num">{{ n | strip }}</span><span class="t">{{ p.title }}</span><span class="tick" aria-hidden="true"></span></a>
+    </li>
+  {%- endfor -%}
+  </ul>
+</article>
