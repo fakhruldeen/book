@@ -1,0 +1,37 @@
+---
+layout: default
+---
+<div class="page-shell contributors-shell" id="page-shell">
+  {% include page_toc.html %}
+
+  <article class="content contributors-content node-type-contributors">
+    <ol class="crumbs" aria-label="مسار الصفحة">
+      <li><a href="{{ '/' | relative_url }}">الغلاف</a></li>
+      <li><a href="{{ '/contents/' | relative_url }}">الفهرس</a></li>
+      <li aria-current="page">{{ page.title | default: "فريق العمل والمساهمون" }}</li>
+    </ol>
+
+    <header class="node-head contributors-page-head">
+      <span class="node-badge badge-contributors">الحقوق الفكرية وفريق العمل · Contributors & Credits</span>
+      <h1 class="node-title" id="top">{{ page.title | default: "فريق العمل والمساهمون في إعداد الكتاب" }}</h1>
+      <p class="contributors-lead">
+        توثيق شامل لجميع القائمين على إنجاز هذا العمل عبر كافة مراحله الإنتاجية: التأليف، المراجعة العلمية، التدقيق اللغوي، التصميم والإخراج الفني، والإشراف والنشر؛ صونًا لحقوقهم الأدبية والفنية والفكرية.
+      </p>
+    </header>
+
+    {% if content and content != "" %}
+    <div class="md contributors-intro">
+      {{ content }}
+    </div>
+    {% endif %}
+
+    {% include contributors_matrix.html %}
+
+    {% include page_meta.html %}
+
+    <nav class="pager contributors-pager" aria-label="التنقل">
+      <a class="pager-btn prev" href="{{ '/' | relative_url }}"><small>السابق</small><span>غلاف الكتاب</span></a>
+      <a class="pager-btn next" href="{{ '/contents/' | relative_url }}"><small>التالي</small><span>فهرس المحتويات</span></a>
+    </nav>
+  </article>
+</div>

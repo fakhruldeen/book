@@ -31,6 +31,128 @@ author:
   website: "https://fakhr.me"
   location: "الرياض، المملكة العربية السعودية"
 
+# ---------- Comprehensive Book Contributors & Rights Matrix ----------
+# Rights preservation across all 5 production stages:
+# 1. Authoring, 2. Reviewing, 3. Proofreading, 4. Design & Production, 5. Publishing
+contributors:
+  authoring:
+    title: "مرحلة التأليف والكتابة"
+    icon: "✍️"
+    description: "أصحاب الحقوق الفكرية والتأليفية للنص الأصلي للكتاب ومحتوياته."
+    roles:
+      - key: "authors"
+        singular: "المؤلف"
+        plural: "المؤلفون"
+        people:
+          - name: "محمد فخر الدين"
+            latin_name: "Mohamed Fakhruldeen"
+            role_detail: "المؤلف الرئيسي ومصمم معمارية القالب"
+            avatar: "/assets/images/author.svg"
+            website: "https://fakhr.me"
+            email: "fakhruldeen@gmail.com"
+            orcid: "0009-0001-2345-6789"
+            affiliation: "منصة فخر للتقنية وتطوير النظم"
+            bio: "مؤلف ومطور برمجيات متخصص في النظم الموزعة ونشر المحتوى الرقمي التفاعلي."
+            rights_statement: "صاحب الحقوق الفكرية والأدبية للمتن والنصوص والشيفرات البرمجية."
+      - key: "co_authors"
+        singular: "المؤلف المشارك"
+        plural: "المؤلفون المشاركون"
+        people: []
+      - key: "editors"
+        singular: "المحرر"
+        plural: "المحررون"
+        people: []
+
+  reviewing:
+    title: "مرحلة المراجعة والتطوير العلمي"
+    icon: "🔬"
+    description: "المساهمون في المراجعة العلمية وتطوير المحتوى وتحسين الصياغة التخصصية."
+    roles:
+      - key: "developmental_editors"
+        singular: "المحرر التطويري"
+        plural: "المحررون التطويريون"
+        people: []
+      - key: "scientific_reviewers"
+        singular: "المراجع العلمي"
+        plural: "المراجعون العلميون"
+        people:
+          - name: "مجتمع خبراء ومراجعي النشر المفتوح"
+            role_detail: "المراجعة المنهجية ومعايير النشر الرقمي"
+            affiliation: "مبادرة التوثيق المفتوح"
+            rights_statement: "المراجعة العلمية لسلامة المفاهيم والتوثيق البرمجي."
+      - key: "copy_editors"
+        singular: "محرر الأسلوب"
+        plural: "محررو الأسلوب"
+        people: []
+      - key: "specialist_reviewers"
+        singular: "المراجع المتخصص"
+        plural: "المراجعون المتخصصون"
+        people: []
+
+  proofreading:
+    title: "مرحلة التدقيق والتحقق"
+    icon: "🔍"
+    description: "المسؤولون عن الضبط اللغوي والتحقق من صحة الوقائع والتصحيح النهائي."
+    roles:
+      - key: "linguistic_proofreaders"
+        singular: "المدقق اللغوي"
+        plural: "المدققون اللغويون"
+        people:
+          - name: "فريق التدقيق اللغوي والطباعي"
+            role_detail: "مراجعة النحو والصرف، ضبط التشكيل، وعلامات الترقيم العربية"
+            affiliation: "مختبر الطباعة واللسانيات الحاسوبية"
+            rights_statement: "التدقيق اللغوي الشامل وضبط المعاجم والمصطلحات."
+      - key: "fact_checkers"
+        singular: "مدقق الحقائق"
+        plural: "مدققو الحقائق"
+        people: []
+      - key: "final_proofreaders"
+        singular: "المصحح النهائي"
+        plural: "المصححون النهائيون"
+        people: []
+
+  design_production:
+    title: "مرحلة التصميم والإنتاج الفني"
+    icon: "🎨"
+    description: "صنّاع الهوية البصرية، وتنسيق الصفحات والخطوط، والرسوم المتجهية."
+    roles:
+      - key: "typesetters"
+        singular: "المنسق ومصمم الصفحات"
+        plural: "منسقو ومصممو الصفحات"
+        people:
+          - name: "فريق تنضيد وتطوير الويب"
+            role_detail: "هندسة CSS، التجاوب مع مختلف الشاشات، وخطوط الويب العربية"
+            affiliation: "مجتمع المصادر المفتوحة"
+            rights_statement: "حقوق التصميم البصري، التنضيد الطباعي، والأنماط."
+      - key: "cover_designers"
+        singular: "مصمم الغلاف"
+        plural: "مصممو الغلاف"
+        people: []
+      - key: "illustrators"
+        singular: "الرسام"
+        plural: "الرسامون"
+        people: []
+
+  publishing:
+    title: "مرحلة الإشراف والنشر"
+    icon: "🏛️"
+    description: "إدارة التحرير والإشراف المؤسسي والتوزيع والنشر الرقمي."
+    roles:
+      - key: "publishers"
+        singular: "الناشر"
+        plural: "الناشرون"
+        people:
+          - name: "منشورات فخر للبرمجيات المفتوحة"
+            latin_name: "Fakhr Open Editions"
+            role_detail: "الناشر والراعي الرسمي للقالب المفتوح"
+            website: "https://fakhr.me"
+            location: "الرياض، المملكة العربية السعودية"
+            rights_statement: "حقوق النشر والتوزيع والترخيص بموجب GPL-3.0 والمشاع الإبداعي."
+      - key: "managing_editors"
+        singular: "مدير التحرير"
+        plural: "مديرو التحرير"
+        people: []
+
 # ---------- Social Links & Contacts ----------
 social:
   github: "https://github.com/fakhruldeen"

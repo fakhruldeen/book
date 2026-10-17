@@ -1,0 +1,120 @@
+{%- assign data_src = include.contributors | default: page.contributors | default: site.contributors -%}
+{%- if data_src -%}
+<div class="contributors-matrix-wrapper" aria-label="مصفوفة المساهمين وحقوق الملكية الفكرية">
+  {%- assign stage_keys = "authoring,reviewing,proofreading,design_production,publishing" | split: "," -%}
+  {%- for sk in stage_keys -%}
+    {%- assign stage = data_src[sk] -%}
+    {%- if stage -%}
+      {%- assign stage_count = 0 -%}
+      {%- for role in stage.roles -%}
+        {%- if role.people and role.people.size > 0 -%}
+          {%- assign stage_count = stage_count | plus: role.people.size -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if stage_count > 0 -%}
+      <section class="contributor-stage-block stage-{{ sk }}">
+        <header class="stage-header">
+          <div class="stage-title-wrap">
+            <span class="stage-icon" aria-hidden="true">{{ stage.icon | default: "👥" }}</span>
+            <h3 class="stage-title">{{ stage.title }}</h3>
+            <span class="stage-badge">{{ stage_count }}</span>
+          </div>
+          {% if stage.description %}
+          <p class="stage-description">{{ stage.description }}</p>
+          {% endif %}
+        </header>
+
+        <div class="stage-roles-wrap">
+          {%- for role in stage.roles -%}
+            {%- if role.people and role.people.size > 0 -%}
+            <div class="role-group role-{{ role.key }}">
+              <h4 class="role-heading">
+                {% if role.people.size > 1 %}
+                  {{ role.plural | default: role.singular }}
+                {% else %}
+                  {{ role.singular }}
+                {% endif %}
+                <span class="role-counter">({{ role.people.size }})</span>
+              </h4>
+
+              <div class="contributors-cards-grid">
+                {%- for person in role.people -%}
+                <article class="contributor-card" itemscope itemtype="https://schema.org/Person">
+                  <div class="contributor-card-top">
+                    {% if person.avatar %}
+                    <img src="{{ person.avatar | relative_url }}" alt="{{ person.name }}" class="contributor-avatar" width="56" height="56" loading="lazy">
+                    {% else %}
+                    <div class="contributor-avatar-placeholder" aria-hidden="true">
+                      {{ person.name | slice: 0, 1 }}
+                    </div>
+                    {% endif %}
+
+                    <div class="contributor-identity">
+                      <h5 class="contributor-name" itemprop="name">
+                        {% if person.website %}
+                        <a href="{{ person.website }}" target="_blank" rel="noopener noreferrer">{{ person.name }}</a>
+                        {% else %}
+                        {{ person.name }}
+                        {% endif %}
+                      </h5>
+                      {% if person.latin_name %}
+                      <span class="contributor-latin-name" dir="ltr">{{ person.latin_name }}</span>
+                      {% endif %}
+                      {% if person.role_detail %}
+                      <span class="contributor-role-detail">{{ person.role_detail }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  {% if person.affiliation %}
+                  <div class="contributor-affiliation">
+                    <span class="aff-icon" aria-hidden="true">🏛️</span>
+                    <span class="aff-name">{{ person.affiliation }}</span>
+                    {% if person.location %}
+                    <span class="aff-location">({{ person.location }})</span>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+
+                  {% if person.bio %}
+                  <p class="contributor-bio">{{ person.bio }}</p>
+                  {% endif %}
+
+                  {% if person.rights_statement %}
+                  <div class="contributor-rights-notice">
+                    <span class="rights-icon" aria-hidden="true">⚖️</span>
+                    <span class="rights-text">{{ person.rights_statement }}</span>
+                  </div>
+                  {% endif %}
+
+                  <!-- Metas & Identifiers: ORCID, Email, Website -->
+                  <div class="contributor-card-footer">
+                    {% if person.orcid %}
+                    <a href="https://orcid.org/{{ person.orcid }}" class="orcid-badge" target="_blank" rel="noopener noreferrer" title="معرّف الباحث المفتوح (ORCID)">
+                      <span class="orcid-icon" aria-hidden="true">iD</span>
+                      <span dir="ltr">{{ person.orcid }}</span>
+                    </a>
+                    {% endif %}
+
+                    {% if person.email %}
+                    <a href="mailto:{{ person.email }}" class="meta-link email-link" title="مراسلة">✉️ تواصل</a>
+                    {% endif %}
+
+                    {% if person.website %}
+                    <a href="{{ person.website }}" class="meta-link web-link" target="_blank" rel="noopener noreferrer" title="الموقع الشخصي">🌐 الموقع</a>
+                    {% endif %}
+                  </div>
+                </article>
+                {%- endfor -%}
+              </div>
+            </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </section>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+</div>
+{%- endif -%}

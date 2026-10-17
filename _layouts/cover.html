@@ -23,7 +23,8 @@ layout: default
     <div class="cover-actions">
       {% if _first %}<a class="btn primary" id="start-btn" href="{{ _first.url | relative_url }}">ابدأ القراءة 📖</a>{% endif %}
       <a class="btn" href="{{ '/contents/' | relative_url }}">فهرس الموضوعات 📑</a>
-      <a class="btn" href="{{ '/search/' | relative_url }}">البحث في الكتاب 🔍</a>
+      <a class="btn" href="{{ '/frontmatter/contributors/' | relative_url }}">فريق العمل 👥</a>
+      <a class="btn" href="{{ '/search/' | relative_url }}">البحث 🔍</a>
     </div>
     <div class="cover-progress" id="cover-progress" hidden>
       <div class="bar"><i></i></div>
