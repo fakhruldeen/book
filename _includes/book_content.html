@@ -7,13 +7,24 @@
   {%- assign raw_docs = raw_docs | concat: site.book -%}
 {%- endif -%}
 
-{%- assign book_list = "" | split: "" -%}
+{%- assign front_list = "" | split: "" -%}
+{%- assign body_list = "" | split: "" -%}
+{%- assign back_list = "" | split: "" -%}
 {%- for p in raw_docs -%}
   {%- if p.path contains ".md" and p.path != "index.md" and p.path != "contents.md" and p.path != "search.md" and p.path != "404.md" and p.path != "README.md" and p.layout != "cover" and p.layout != "toc" and p.layout != "search" -%}
-    {%- assign book_list = book_list | push: p -%}
+    {%- if p.layout == "frontmatter" or p.path contains "frontmatter/" -%}
+      {%- assign front_list = front_list | push: p -%}
+    {%- elsif p.layout == "backmatter" or p.path contains "backmatter/" -%}
+      {%- assign back_list = back_list | push: p -%}
+    {%- else -%}
+      {%- assign body_list = body_list | push: p -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
-{%- assign book_list = book_list | sort: "path" -%}
+{%- assign front_list = front_list | sort: "path" -%}
+{%- assign body_list = body_list | sort: "path" -%}
+{%- assign back_list = back_list | sort: "path" -%}
+{%- assign book_list = front_list | concat: body_list | concat: back_list -%}
 
 {%- capture num -%}
   {%- if page.num -%}

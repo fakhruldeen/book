@@ -29,9 +29,35 @@ layout: default
 
     {% include page_meta.html %}
 
+    {%- assign raw_docs = site.pages -%}
+    {%- if site.book and site.book.size > 0 -%}{%- assign raw_docs = raw_docs | concat: site.book -%}{%- endif -%}
+    {%- assign fm_list = "" | split: "" -%}
+    {%- for p in raw_docs -%}
+      {%- if p.layout == "frontmatter" or p.layout == "contributors" or p.path contains "frontmatter/" -%}
+        {%- assign fm_list = fm_list | push: p -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign fm_list = fm_list | sort: "path" -%}
+    {%- assign idx = -1 -%}
+    {%- for p in fm_list -%}
+      {%- if p.path == page.path or p.url == page.url -%}{%- assign idx = forloop.index0 -%}{%- endif -%}
+    {%- endfor -%}
+    {%- assign pi = idx | minus: 1 -%}
+    {%- assign ni = idx | plus: 1 -%}
+
     <nav class="pager contributors-pager" aria-label="التنقل">
-      <a class="pager-btn prev" href="{{ '/' | relative_url }}"><small>السابق</small><span>غلاف الكتاب</span></a>
-      <a class="pager-btn next" href="{{ '/contents/' | relative_url }}"><small>التالي</small><span>فهرس المحتويات</span></a>
+      {%- if idx > 0 -%}
+        {%- assign prev_p = fm_list[pi] -%}
+        <a class="pager-btn prev" href="{{ prev_p.url | relative_url }}"><small>السابق</small><span>{{ prev_p.title }}</span></a>
+      {%- else -%}
+        <a class="pager-btn prev" href="{{ '/' | relative_url }}"><small>السابق</small><span>الغلاف</span></a>
+      {%- endif -%}
+      {%- if ni < fm_list.size -%}
+        {%- assign next_p = fm_list[ni] -%}
+        <a class="pager-btn next" href="{{ next_p.url | relative_url }}"><small>التالي</small><span>{{ next_p.title }}</span></a>
+      {%- else -%}
+        <a class="pager-btn next" href="{{ '/contents/' | relative_url }}"><small>التالي</small><span>فهرس المحتويات</span></a>
+      {%- endif -%}
     </nav>
   </article>
 </div>

@@ -1,3 +1,4 @@
-{%- assign _segs = include.path | remove: ".md" | split: "/" -%}
+{%- assign _clean = include.path | remove_first: "_book/" | remove: ".md" -%}
+{%- assign _segs = _clean | split: "/" -%}
 {%- capture _num -%}{%- for s in _segs -%}{{ s | split: "_" | first }}{%- unless forloop.last -%}.{%- endunless -%}{%- endfor -%}{%- endcapture -%}
 {{- _num -}}

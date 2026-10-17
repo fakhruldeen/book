@@ -27,9 +27,35 @@ layout: default
 
     {% include page_meta.html %}
 
+    {%- assign raw_docs = site.pages -%}
+    {%- if site.book and site.book.size > 0 -%}{%- assign raw_docs = raw_docs | concat: site.book -%}{%- endif -%}
+    {%- assign bm_list = "" | split: "" -%}
+    {%- for p in raw_docs -%}
+      {%- if p.layout == "backmatter" or p.path contains "backmatter/" -%}
+        {%- assign bm_list = bm_list | push: p -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign bm_list = bm_list | sort: "path" -%}
+    {%- assign idx = -1 -%}
+    {%- for p in bm_list -%}
+      {%- if p.path == page.path or p.url == page.url -%}{%- assign idx = forloop.index0 -%}{%- endif -%}
+    {%- endfor -%}
+    {%- assign pi = idx | minus: 1 -%}
+    {%- assign ni = idx | plus: 1 -%}
+
     <nav class="pager backmatter-pager" aria-label="التنقل">
-      <a class="pager-btn prev" href="{{ '/contents/' | relative_url }}"><small>السابق</small><span>فهرس الموضوعات</span></a>
-      <a class="pager-btn next" href="{{ '/' | relative_url }}"><small>البداية</small><span>غلاف الكتاب</span></a>
+      {%- if idx > 0 -%}
+        {%- assign prev_p = bm_list[pi] -%}
+        <a class="pager-btn prev" href="{{ prev_p.url | relative_url }}"><small>السابق</small><span>{{ prev_p.title }}</span></a>
+      {%- else -%}
+        <a class="pager-btn prev" href="{{ '/contents/' | relative_url }}"><small>السابق</small><span>فهرس الموضوعات</span></a>
+      {%- endif -%}
+      {%- if ni < bm_list.size -%}
+        {%- assign next_p = bm_list[ni] -%}
+        <a class="pager-btn next" href="{{ next_p.url | relative_url }}"><small>التالي</small><span>{{ next_p.title }}</span></a>
+      {%- else -%}
+        <a class="pager-btn next" href="{{ '/' | relative_url }}"><small>البداية</small><span>غلاف الكتاب</span></a>
+      {%- endif -%}
     </nav>
   </article>
 </div>
